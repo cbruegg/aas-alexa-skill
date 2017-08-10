@@ -9,6 +9,8 @@ http://amzn.to/1LGWsLG
 
 from __future__ import print_function
 import feedparser
+from datetime import datetime
+import urllib2
 
 
 # --------------- Helpers that build all of the responses ----------------------
@@ -45,8 +47,12 @@ def build_response(session_attributes, speechlet_response):
 # --------------- Functions that control the skill's behavior ------------------
 
 def get_titles():
+    print(datetime.now().isoformat() + ": Starting feed download!")
     url = "https://allaboutsamsung.de/feed/"
-    feed = feedparser.parse(url)
+    str = urllib2.urlopen(url).read()
+    print(datetime.now().isoformat() + ": Got str!")
+    feed = feedparser.parse(str)
+    print(datetime.now().isoformat() + ": Got feed!")
     items = feed["items"]
     titles = []
     for item in items[:5]:
@@ -54,7 +60,7 @@ def get_titles():
     return titles
     
 def get_titles_str():
-    return ". ".join(get_titles())
+    return ".\n".join(get_titles())
 
 def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could
